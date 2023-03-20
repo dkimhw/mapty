@@ -77,6 +77,7 @@ class App {
     inputType.addEventListener('change', this._toggleElevationField);
     containerWorkouts.addEventListener('click', this._moveToPopUp.bind(this));
     document.addEventListener('click', this._deleteWorkout.bind(this));
+    document.addEventListener('click', this._editWorkout.bind(this));
   }
 
   _getPosition() {
@@ -198,6 +199,7 @@ class App {
   _renderWorkout(workout) {
     let html = `
       <li class="workout workout--${workout.type}" data-id="${workout.id}">
+        <button class="edit-btn" data-id="${workout.id}">Edit</button>
         <button class="delete-btn" data-id="${workout.id}">Delete</button>
         <h2 class="workout__title">${workout.description}</h2>
         <div class="workout__details">
@@ -285,7 +287,6 @@ class App {
   _deleteWorkout(e) {
     // Guard clause that looks for specific button click
     let element = e.target;
-    console.log(element.tagName);
 
     if (element.tagName === 'BUTTON' && element.classList.contains("delete-btn")) {
       // identify the workout by dataset id
@@ -303,6 +304,39 @@ class App {
       this.#workouts = this.#workouts.filter(work => work.id !== workoutID);
       this._setLocalStorage();
     }
+  }
+
+  _editWorkout(e) {
+    e.preventDefault();
+
+    // Show form
+    this._showForm(e);
+
+    // Find element
+    let element = e.target;
+
+    // identify the workout by dataset id
+    const workoutID = element.dataset.id;
+    if (!workoutID) return;
+
+    // Update values
+    // Get data from workout
+    const workoutData =  this.#workouts.filter(work => work.id === workoutID)[0];
+    console.log(workoutData);
+    inputDistance.value = workoutData.distance;
+    inputDuration.value = workoutData.duration;
+    inputType.value = workoutData.type;
+
+    if (workoutData.type === 'cycling') {
+      inputType.value = workoutData.elevationGain;
+    }
+
+    // Remove marker
+
+    // remove workout from workouts list
+    // this.#workouts = this.#workouts.filter(work => work.id !== workoutID);
+    // this._setLocalStorage();
+    // Guard clause that looks for specific button click
   }
 
   reset() {

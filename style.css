@@ -226,3 +226,10 @@ a:visited {
   padding: .25rem;
   border-radius: 4px;
 }
+
+.edit-btn {
+  background-color: #146C94;
+  border: none;
+  padding: .25rem;
+  border-radius: 4px;
+}
